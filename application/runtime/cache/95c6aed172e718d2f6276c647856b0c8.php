@@ -1,0 +1,3 @@
+<?php
+//000000000000a:4:{s:6:"fields";a:8:{i:0;s:2:"id";i:1;s:4:"name";i:2;s:11:"description";i:3;s:5:"price";i:4;s:7:"img_url";i:5;s:18:"is_sales_promotion";i:6;s:15:"promotion_price";i:7;s:9:"is_delete";}s:4:"bind";a:8:{s:2:"id";i:1;s:4:"name";i:2;s:11:"description";i:2;s:5:"price";i:1;s:7:"img_url";i:2;s:18:"is_sales_promotion";i:1;s:15:"promotion_price";i:1;s:9:"is_delete";i:1;}s:4:"type";a:8:{s:2:"id";s:7:"int(11)";s:4:"name";s:12:"varchar(255)";s:11:"description";s:12:"varchar(255)";s:5:"price";s:13:"decimal(10,2)";s:7:"img_url";s:12:"varchar(255)";s:18:"is_sales_promotion";s:10:"tinyint(2)";s:15:"promotion_price";s:13:"decimal(10,2)";s:9:"is_delete";s:10:"tinyint(2)";}s:2:"pk";s:2:"id";}
+?>

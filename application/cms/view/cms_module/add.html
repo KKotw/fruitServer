@@ -1,0 +1,51 @@
+{include file="layout/new_header" /}
+            <div class="cms_right_box1">
+                <label>添加大模块</label>
+            </div>
+            <div class="cms_right_box2">
+                <div class="cms_right_box2_write">
+                    <form id="addFrom" action="{:U('add')}" method="post">
+                    <div class="cms_right_box2_write_inner">
+                        <div class="cms_right_box2_write_group1">
+                            <label>名称</label>
+                            <div class="cms_right_box2_write_group1_inner1"><input  id="name" name="name" type="text" value="" /></div>
+                        </div>
+
+                        <div class="cms_right_box2_write_group1">
+                            <label>状态</label>
+                            <div class="cms_right_box2_write_group1_inner1">
+                                <select  id='status' name = 'status'>
+                                    <option value="0">正常</option>
+                                    <option value="4">删除</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1 write_group_btn">
+                            <a href="javascript:;" id="saveBtn">保存</a>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+{include file="layout/new_footer" /}
+    <script type="text/javascript">
+        $(function(){
+
+            // 保存事件绑定
+            initSaveBtn();
+
+        });
+        /**
+         * 保存按钮绑定
+         */
+        function initSaveBtn() {
+            $("#saveBtn").bind("click", function(){
+                if ($("#addFrom").valid()) {
+  
+                    $("#addFrom").submit();
+                }
+            });
+        }
+    </script>

@@ -1,0 +1,246 @@
+{include file="layout/new_header" /}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+
+            <div class="cms_right_box1">
+                <label>添加</label>
+            </div>
+            <div class="cms_right_box2">
+                <div class="cms_right_box2_write">
+                    <div class="cms_right_box2_write_inner">
+                        <form class="cmxform form-horizontal adminex-form" id="addForm" action="{:U('add')}" method="post">
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>订单ID</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <input  id="order_id" name="order_id" type="number" value="" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>用户ID</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <input  id="user_id" name="user_id" type="number" value="" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>产品ID</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <input  id="product_id" name="product_id" type="number" value="" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>产品名</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                    <input  id="product_name" name="product_name" type="text" value="" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>产品购买数</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <input  id="product_count" name="product_count" type="number" value="" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>该产品总支付额</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <input  id="price" name="price" type="number" value="" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label>创建时间<span style="color:red">*</span></label>
+                            <div class="cms_right_box2_write_group1_inner1">
+                                <input id="createtime" name="createtime" value=""/>
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1 write_group_btn">
+                            <a href="javascript:;" id="saveBtn">保存</a>
+                        </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var editor;
+        $(function(){
+            // 时间控件初始化
+            initDateTimePickers('createtime');  
+
+            // 保存事件绑定
+            initSaveBtn();
+
+            // form验证初始化
+            initValidate();
+
+
+        });
+
+        /**
+         * 初始化时间控件
+         */
+        function initDateTimePickers(field) {
+            $("#"+field).datetimepicker({
+                format: "yyyy-mm-dd hh:ii",
+                autoclose: true,
+                todayBtn: true,
+                startDate: "2016-01-01 10:00"
+            });
+            $("#"+field+"Reset").click(function(){
+                $("#"+field).val("");
+            });
+            $("#"+field+"Set").click(function(){
+                $("#"+field).datetimepicker('show');
+            });
+        }
+
+        /**
+         * 文件上传框初始化
+         */
+        function initFileUpload(fieldClick,fieldUp,fieldValue,fieldView){
+            $(fieldClick).bind("click", function(){
+                return $(fieldUp).click();
+            });
+
+            $(fieldUp).fileupload({
+                autoUpload:true,
+                url:'{:U("upload/fileupload")}?photodir=fruit_order_detail',
+                dataType:'json',
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                maxFileSize: 5000000,
+                added:function(e,data){
+                  if (data.files.error) {
+                      alert(data.files[0].error);
+                      return false;
+                  }
+                },
+                done:function(e,data){
+                  $(fieldView).attr('src', data.result.url);
+                  $(fieldValue).attr('value',data.result.url);
+                }
+            });        
+        }
+        /**
+         * 富文本框初始化
+         */
+        function initKindEditor(field) {
+            KindEditor.ready(function(K) {
+                editor = K.create('#'+field, {
+                    resizeType : 1,
+                    allowPreviewEmoticons : false,
+                    allowImageUpload : true,
+                    uploadJson : '{:U("upload/kindEditorUpload")}?photodir=fruit_order_detail_text',
+                    height:350,
+                    width:'100%',
+                    items : [
+                        'source','undo','clearhtml','hr',
+                        'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                        'insertunorderedlist', '|', 'emoticons', 'image','link', 'unlink','baidumap','lineheight','table','anchor','preview','print','template','code','cut']
+                });
+            });
+        }
+
+        /**
+         * 表单验证初始化
+         */
+        function initValidate() {
+              // 手机号码验证
+              jQuery.validator.addMethod("isPhone", function(value, element) {
+                var length = value.length;
+                return this.optional(element) || (length == 11 && /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(value));
+              }, "请正确填写您的手机号码。");
+
+            $("#addForm").validate({
+                rules: {
+                    price:{
+                        number:true,
+                        min:0
+                    },   
+
+                },
+                messages: {
+                    price:{
+                        number:'必须输入合法的数字',
+                        min:'输入值不能小于0'
+                    },   
+                }
+            });
+        }
+        /**
+         * 保存按钮绑定
+         */
+        function initSaveBtn() {
+            $("#saveBtn").bind("click", function(){
+                if ($("#addForm").valid()) {
+                    // 图片隐藏框和富文本框只能alert提示错误
+                    // if ($("#imgurl").val() == null || $('#imgurl').val() == "") {
+                    //     alert("请上传图片");
+                    //     return false;
+                    // }
+                    if($('#order_id').val()==''){
+                        alert('订单ID为空或者格式不正确');
+                        return false;
+                    }
+                    if($('#user_id').val()==''){
+                        alert('用户ID为空或者格式不正确');
+                        return false;
+                    }
+                    if($('#product_id').val()==''){
+                        alert('产品ID为空或者格式不正确');
+                        return false;
+                    }
+                    if($('#product_name').val()==''){
+                        alert('产品名为空或者格式不正确');
+                        return false;
+                    }
+                    if($('#product_count').val()==''){
+                        alert('产品购买数为空或者格式不正确');
+                        return false;
+                    }
+                    if($('#price').val()==''){
+                        alert('该产品总支付额为空或者格式不正确');
+                        return false;
+                    }
+                    if ($("#createtime").val() == null || $('#createtime').val() == "") {
+                        alert("创建时间不能为空");
+                        return false;
+                    }
+                    $("#addForm").submit();
+                }
+            });
+        }
+
+        function initAddLineBtn(field) {
+            $(".addLineBtn"+field).click(function(){
+                $("#addForm ."+field+"selectionLine").last().after($(addNewLine(field)));
+                var num = Math.floor(Math.random()*10000+1);
+                var up = field + 'Up' + num;
+                var click = field + 'Click' + num;
+                var view = field + 'View' + num;
+                var value = field + 'Value' + num;
+                $('#addForm .'+field+'selectionLine').last().children().first().attr('id',up);
+                $('#addForm .'+field+'selectionLine').last().children('.cms_right_box2_write_group1_inner5').find('span').find('input').attr('id',value);
+                $('#addForm .'+field+'selectionLine').last().children('.cms_right_box2_write_group1_inner5').find('span').find('a').attr('id',click);
+                $('#addForm .'+field+'selectionLine').last().children('.cms_right_box2_write_group1_inner5').find('b').find('img').attr('id',view);
+                initFileUpload('#'+click,'#'+up,'#'+value,'#'+view);
+            });
+        }
+        function addNewLine(field) {
+            var selectionLine = $("#"+field+"selectionTemplate").children().clone(true);
+            $(selectionLine).show();
+            $(selectionLine).removeAttr("id");
+            $(selectionLine).addClass(field+'selectionLine');
+            return selectionLine;
+        }
+        function initDeleteLineBtn(field) {
+            $(".deleteLineBtn"+field).click(function(){
+                var selectionLine = $("#addForm").find("div."+field+"selectionLine");
+                if (selectionLine.length > 1) {
+                    $(this).parents("div."+field+"selectionLine").remove();
+                } else { 
+                    $(this).parents("div."+field+"selectionLine").children('.cms_right_box2_write_group1_inner5').find('b').find('img').attr("src",'');
+                    $(this).parents("div."+field+"selectionLine").find("input").val("");
+                }
+            });
+        }
+
+    </script>
+    {include file="layout/new_footer" /}

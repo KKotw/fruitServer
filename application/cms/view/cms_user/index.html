@@ -1,0 +1,80 @@
+{include file="layout/new_header" /}
+            <div class="cms_right_box1">
+                <form id="searchFrom" action='{:U("index")}' method='get'>
+                    <label>后台用户列表：</label>
+                    <div class="cms_right_box1_inner">
+                        <em><span>用户名称</span><input  name="username" value="{$username|default=""}" /></em>
+                    </div>
+                    <input type="hidden" name='pageSize' id='setPageSize'>
+                </form>
+                <b><a href="javascript:;" class='submit' style="background: #70c4e8;">查找</a><a href="javascript:;" id="resetval">清空</a></b>
+            </div>
+            <div class="cms_right_box2">
+                <div class="cms_right_box2_title">
+                    <div class="cms_right_box2_title_right"><a href="{:U('update')}"><img src="{$Think.__STATIC__}/cms/images/add.png" />新增用户</a></div>
+                </div>
+                <div class="cms_right_box2_table">
+                    
+                    
+        <section class="panel">
+            <div class="panel-body">
+                <section id="no-more-tables">
+                    <table class="table table-bordered table-striped table-condensed cf table-hover">
+                        <thead class="cf">
+                        <tr>
+                            <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">ID</th>
+                            <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">用户名称</th>
+                            <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">用户角色</th>
+                            <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">重置密码</th>
+                            <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">分配角色</th>
+                            <th class="width_limit" style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $arr as $k=>$list}
+                        <tr>
+                            <td data-title="ID">{$list.id}&nbsp;</td>
+                            <td data-title="用户名称" title="{$list.username}">{$list.username}&nbsp;</td>
+                            <td data-title="用户角色" title="{$list.rolename}">{$list.rolename}&nbsp;</td>
+                            <td class="width_limit" data-title="重置密码" style="height: 40px;">
+                                <a href="{:U('resetpassword',array('id'=>$list.id))}" class="cms_list_edit"></a>
+                            </td>
+                            <td class="width_limit" data-title="分配角色" style="height: 40px;">
+                                <a href="{:U('setrole',array('id'=>$list.id))}" class="cms_list_edit"></a>
+                            </td>
+                            <td class="width_limit" data-title="操作" style="height: 40px;">
+                                <a href="{:U('update',array('id'=>$list.id))}" class="cms_list_edit"></a>
+                                <a href="{:U('delete',array('id'=>$list.id))}" class="cms_list_delete"></a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </section>
+        </div>
+    </div>
+</div>
+{include file="layout/new_pager" /}
+</div>
+{include file="layout/new_footer" /}
+
+
+<script>
+    $(function(){
+
+        $('.submit').click(function(){
+            
+            pageSize = $('#pageSize[name="pageSize"]').val();
+            $('#setPageSize').val(pageSize);
+            return $('#searchFrom').submit();
+        })
+        $('#resetval').click(function(){
+            $('#searchFrom').find('input').val('');
+            $('#searchFrom').find('select').val('');
+            $('#pageSize[name="pageSize"]').val('25');
+            
+        })
+    })
+</script>

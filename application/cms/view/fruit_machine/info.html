@@ -1,0 +1,249 @@
+{include file="layout/new_header" /}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+
+            <div class="cms_right_box1">
+                <label>货架机器详情</label>
+            </div>
+            <div class="cms_right_box2">
+                <div class="cms_right_box2_write">
+                    <div class="cms_right_box2_write_inner">
+                        <form class="cmxform form-horizontal adminex-form" id="editForm" action="{:U('edit',array('id'=>$Think.get.id))}" method="post">
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>货架ID</label>
+                            <div class="cms_right_box2_write_group1_inner1">        
+                                <input id="id" name="id" type="number" value="{$info['id']|default=''}" disabled/>
+                            </div>
+                        </div>
+<!-- input -->
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>货架名称</label>
+                            <div class="cms_right_box2_write_group1_inner1">      
+                                <input  id="name" name="name" type="text" value='{$info['name']|default=''}' disabled/>
+                            </div>
+                        </div>
+<!-- input -->
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>联系人</label>
+                            <div class="cms_right_box2_write_group1_inner1">      
+                                <input  id="contact_name" name="contact_name" type="text" value='{$info['contact_name']|default=''}' disabled/>
+                            </div>
+                        </div>
+<!-- input -->
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>联系人手机</label>
+                            <div class="cms_right_box2_write_group1_inner1">      
+                                <input  id="contact_mobile" name="contact_mobile" type="text" value='{$info['contact_mobile']|default=''}' disabled/>
+                            </div>
+                        </div>
+<!-- input -->
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>联系人地址</label>
+                            <div class="cms_right_box2_write_group1_inner1">      
+                                <input  id="contact_address" name="contact_address" type="text" value='{$info['contact_address']|default=''}' disabled/>
+                            </div>
+                        </div>
+<!-- input -->
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>货架mac地址</label>
+                            <div class="cms_right_box2_write_group1_inner1">      
+                                <input  id="mac" name="mac" type="text" value='{$info['mac']|default=''}' disabled/>
+                            </div>
+                        </div>
+
+                            <div class="cms_right_box2_write_group1">
+                                <label><span style="color:red">*</span>二维码</label>
+                                <div class="cms_right_box2_write_group1_inner5">
+                                    <b>
+                                        <img  src="{$Think.__STATIC__}/qrcode/{$info['id']}.png" />
+                                    </b>
+                                </div>
+                            </div>
+
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>状态</label>
+                            <div class="cms_right_box2_write_group1_inner1">
+                                <input  id="is_delete" name="is_delete" type="text" value='{if $info['is_delete']==1}删除{else}正常{/if}'/>
+                            </div>
+                        </div>
+
+
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        var editor;
+        $(function(){
+            // 时间控件初始化
+            initDateTimePickers();
+
+            // 保存事件绑定
+            initSaveBtn();
+
+            // form验证初始化
+            initValidate();
+
+
+        });
+
+        /**
+         * 初始化时间控件
+         */
+        function initDateTimePickers(field) {
+            $("#"+field).datetimepicker({
+                format: "yyyy-mm-dd hh:ii",
+                autoclose: true,
+                todayBtn: true,
+                startDate: "2016-01-01 10:00"
+            });
+            $("#"+field+"Reset").click(function(){
+                $("#"+field).val("");
+            });
+            $("#"+field+"Set").click(function(){
+                $("#"+field).datetimepicker('show');
+            });
+        }
+
+        /**
+         * 文件上传框初始化
+         */
+        function initFileUpload(fieldClick,fieldUp,fieldValue,fieldView){
+            $(fieldClick).bind("click", function(){
+                return $(fieldUp).click();
+            });
+
+            $(fieldUp).fileupload({
+                autoUpload:true,
+                url:'{:U("upload/fileupload")}?photodir=fruit_machine',
+                dataType:'json',
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                maxFileSize: 800000,
+                added:function(e,data){
+                  if (data.files.error) {
+                      alert(data.files[0].error);
+                      return false;
+                  }
+                },
+                done:function(e,data){
+                  $(fieldView).attr('src', data.result.url);
+                  $(fieldValue).attr('value',data.result.url);
+                }
+            });        
+        }
+        
+        /**
+         * 富文本框初始化
+         */
+        function initKindEditor(field) {
+            KindEditor.ready(function(K) {
+                editor = K.create('#'+field, {
+                    resizeType : 1,
+                    allowPreviewEmoticons : false,
+                    allowImageUpload : true,
+                    uploadJson : '{:U("upload/kindEditorUpload")}?photodir=fruit_machine_text',
+                    height:350,
+                    width:'100%',
+                    items : [
+                        'source','undo','clearhtml','hr',
+                        'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                        'insertunorderedlist', '|', 'emoticons', 'image','link', 'unlink','baidumap','lineheight','table','anchor','preview','print','template','code','cut']
+                });
+            });
+        }
+
+        /**
+         * 表单验证初始化
+         */
+        function initValidate() {
+              // 手机号码验证
+              jQuery.validator.addMethod("isPhone", function(value, element) {
+                var length = value.length;
+                return this.optional(element) || (length == 11 && /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(value));
+              }, "请正确填写您的手机号码。");
+              
+            $("#editForm").validate({
+                rules: {
+
+                },
+                messages: {
+                }
+            });
+        }
+        /**
+         * 保存按钮绑定
+         */
+        function initSaveBtn() {
+            $("#saveBtn").bind("click", function(){
+                if ($("#editForm").valid()) {
+                    if($('#id').val()==''){
+                        alert('请输入ID');
+                        return false;
+                    }
+                    if($('#name').val()==''){
+                        alert('请输入货架名称');
+                        return false;
+                    }
+                    if($('#contact_name').val()==''){
+                        alert('请输入联系人');
+                        return false;
+                    }
+                    if($('#contact_mobile').val()==''){
+                        alert('请输入联系人手机');
+                        return false;
+                    }
+                    if($('#contact_address').val()==''){
+                        alert('请输入联系人地址');
+                        return false;
+                    }
+                    if($('#mac').val()==''){
+                        alert('请输入货架mac地址');
+                        return false;
+                    }
+                    if($('#is_delete').val()==''){
+                        alert('请输入状态');
+                        return false;
+                    }
+                    $("#editForm").submit();
+                }
+            });
+        }
+        function initAddLineBtn(field) {
+            $(".addLineBtn"+field).click(function(){
+                $("#editForm ."+field+"selectionLine").last().after($(addNewLine(field)));
+                var num = Math.floor(Math.random()*10000+1);
+                var up = field + 'Up' + num;
+                var click = field + 'Click' + num;
+                var view = field + 'View' + num;
+                var value = field + 'Value' + num;
+                $('#editForm .'+field+'selectionLine').last().children().first().attr('id',up);
+                $('#editForm .'+field+'selectionLine').last().children('.cms_right_box2_write_group1_inner5').find('span').find('input').attr('id',value);
+                $('#editForm .'+field+'selectionLine').last().children('.cms_right_box2_write_group1_inner5').find('span').find('a').attr('id',click);
+                $('#editForm .'+field+'selectionLine').last().children('.cms_right_box2_write_group1_inner5').find('b').find('img').attr('id',view);
+                initFileUpload('#'+click,'#'+up,'#'+value,'#'+view);
+            });
+        }
+        function addNewLine(field) {
+            var selectionLine = $("#"+field+"selectionTemplate").children().clone(true);
+            $(selectionLine).show();
+            $(selectionLine).removeAttr("id");
+            $(selectionLine).addClass(field+'selectionLine');
+            return selectionLine;
+        }
+        function initDeleteLineBtn(field) {
+            $(".deleteLineBtn"+field).click(function(){
+                var selectionLine = $("#editForm").find("div."+field+"selectionLine");
+                if (selectionLine.length > 1) {
+                    $(this).parents("div."+field+"selectionLine").remove();
+                } else { 
+                    $(this).parents("div."+field+"selectionLine").children('.cms_right_box2_write_group1_inner5').find('b').find('img').attr("src",'');
+                    $(this).parents("div."+field+"selectionLine").find("input").val("");
+                }
+            });
+        }
+
+    </script>
+   {include file="layout/new_footer" /}

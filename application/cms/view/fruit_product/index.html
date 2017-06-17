@@ -1,0 +1,151 @@
+{include file="layout/new_header" /}
+            <div class="cms_right_box1">
+                <form id="searchFrom" action='{:U("index")}' method='get'>
+
+                    
+                    <input type="hidden" name='pageSize' id='setPageSize'>
+                    <label>果汁商品列表：</label>
+                    <div class="cms_right_box1_inner">
+                        <em><span>ID</span><input name="id" value='{$searchCnd['id']|default=""}'></em>
+                        <em><span>商品名称</span><input name="name" value='{$searchCnd['name']|default=""}'></em>
+                        <em>
+                            <span>是否参加促销</span>
+                            <select id="is_sales_promotion" name="is_sales_promotion" >
+                                <option value="">全部</option>
+                                <option value="1"  {:isset($searchCnd['is_sales_promotion']) && 1==$searchCnd['is_sales_promotion']? "selected" : ""}>是</option>
+                                <option value="0"  {:isset($searchCnd['is_sales_promotion']) && 0==$searchCnd['is_sales_promotion']? "selected" : ""}>不是</option>
+                            </select>
+                        </em>
+                </div>
+                    
+                </form>
+                    
+                <b>
+                    <a href="javascript:;" class='submit' style="background: #70c4e8;">查找</a>
+                    <a href="javascript:;" id="resetval">清空</a>
+                </b>
+            </div>
+
+        <div class="cms_right_box2">
+
+            <div class="cms_right_box2_title">
+                
+                <div class="cms_right_box2_title_right"><a href="{:U('add')}"><img src="{$Think.__STATIC__}/cms/images/add.png" />新增果汁商品</a></div>
+  
+                <div class="cms_right_box2_title_right"><a href="javascript:;" class='toexcel'><img src="{$Think.__STATIC__}/cms/images/down.png" />导出Excel</a></div>
+                
+            </div>
+
+
+            <div class="cms_right_box2_table">
+                <section class="panel">
+                    <div class="panel-body">
+                        <section id="no-more-tables">
+                            <table class="table table-bordered table-striped table-condensed cf table-hover">
+                                <thead class="cf">
+                                <tr>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">ID</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">商品名称</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">口味</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">商品价格</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">是否参加促销</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">促销价格</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">状态</th>
+                                    <th class="width_limit" style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;width:160px">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {foreach $arr as $k=>$list}
+                                <tr>
+                                    <td data-title="ID" title="{$list['id']}">{$list['id']}&nbsp;</td>
+                                    <td data-title="商品名称" title="{$list['name']}">{$list['name']}&nbsp;</td>
+                                    <td data-title="商品描述" title="{$list['description']}">{$list['description']}&nbsp;</td>
+                                    <td data-title="商品价格" title="{$list['price']|number_format=###,2}">{$list['price']|number_format=###,2}&nbsp;</td>
+                                    {if $list['is_sales_promotion']==1}
+                                    <td data-title="是否参加促销" title="{$list['is_sales_promotion']}">是&nbsp;</td>
+                                    {else}
+                                    <td data-title="是否参加促销" title="{$list['is_sales_promotion']}">不是&nbsp;</td>
+                                    {/if}
+                                    <td data-title="促销价格" title='{$list['promotion_price']|number_format=###,2}'>{$list['promotion_price']|number_format=###,2}&nbsp;</td>
+                                    {if $list['is_delete']==0}
+                                    <td data-title="状态" title="{$list['is_delete']}">正常&nbsp</td>
+                                    {else}
+                                    <td data-title="状态" title="{$list['is_delete']}">下架&nbsp</td>
+                                    {/if}
+                                    <td class="width_limit" data-title="操作" style="height: 40px;">
+                                        <a  href="{:U('info',array('id'=>$list.id))}" class="cms_list_detail" title='详情'></a>
+                                        <a href="{:U('edit',array('id'=>$list.id))}" class="cms_list_edit" title='编辑'></a>
+                                        {if $list['is_delete']==0}
+                                        <a href="{:U('delete',array('id'=>$list.id))}" class="cms_list_delete" title='下架'></a>
+                                        {/if}
+                                    </td>
+                                </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
+                </section>
+
+                </div>
+            </div>
+        </div>        
+        {include file="layout/new_pager" /}
+        </div>
+        {include file="layout/new_footer" /}
+
+
+<script>
+    $(function(){
+        $('.submit').click(function(){
+            
+            pageSize = $('#pageSize[name="pageSize"]').val();
+            $('#setPageSize').val(pageSize);
+            return $('#searchFrom').submit();
+        })
+        $('#resetval').click(function(){
+            $('#searchFrom').find('input').val('');
+            $('#searchFrom').find('select').val('');
+            $('#pageSize[name="pageSize"]').val('25');
+            
+        })
+
+        inittoexcel();
+    })
+    function initDateTimePickers(field) {
+            $("#"+field).datetimepicker({
+                format: "yyyy-mm-dd hh:ii",
+                autoclose: true,
+                todayBtn: true,
+                startDate: "2016-01-01 10:00"
+            });
+            $("#starttimeReset").click(function(){
+                $("#"+field).val("");
+            });
+            $("#starttimeSet").click(function(){
+                $("#"+field).datetimepicker('show');
+            });
+            $("#"+field+"1").datetimepicker({
+                format: "yyyy-mm-dd hh:ii",
+                autoclose: true,
+                todayBtn: true,
+                startDate: "2016-01-01 10:00"
+            });
+            $("#starttimeReset").click(function(){
+                $("#"+field+"1").val("");
+            });
+            $("#starttimeSet").click(function(){
+                $("#"+field+"1").datetimepicker('show');
+            });
+    }
+    function inittoexcel(){
+        $('.toexcel').click(function(){
+            $("#searchFrom").prepend("<input id='gotoexcel' name='toexcel' value='1' type='hidden' >");
+            $('#searchFrom').attr('action','{:U('excel')}');
+            $('#searchFrom').submit();
+            $('#searchFrom').attr('action','{:U('index')}')
+            $('#gotoexcel').remove();
+        })
+    }
+
+</script>

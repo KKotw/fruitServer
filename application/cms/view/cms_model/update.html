@@ -1,0 +1,54 @@
+{include file="layout/new_header" /}
+            <div class="cms_right_box1">
+                <label>添加/编辑模块</label>
+            </div>
+            <div class="cms_right_box2">
+                <div class="cms_right_box2_write">
+                    <form  id="editFrom" action="{:U('update',array('id'=>$info.id))}" method="post">
+                    <div class="cms_right_box2_write_inner">
+                        <div class="cms_right_box2_write_group1">
+                            <label>上级菜单名称</label>
+                            <div class="cms_right_box2_write_group1_inner1">
+                                <select name="module_id" id="" class="form-control ">
+                                    {foreach $cms_module as $v}
+                                        <option value="{$v['id']}" {if isset($info.dm_id) && $info.dm_id == $v.id}  selected {/if}>{$v['name']}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label>菜单名称</label>
+                            <div class="cms_right_box2_write_group1_inner1"><input id="menuname" name="menuname" type="text" value="{$info.menuname|default=''}"/></div>
+                        </div>
+
+                        <div class="cms_right_box2_write_group1">
+                            <label>模块名称</label>
+                            <div class="cms_right_box2_write_group1_inner1">
+                                 <input id="modelname" name="modelname" type="text" value="{$info.modelname|default=''}" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1 write_group_btn">
+                            <a href="javascript:;" id="saveBtn">保存</a>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+{include file="layout/new_footer" /}
+    <script type="text/javascript">
+        $(function(){
+            $('#saveBtn').click(function(){
+                if($('#menuname').val()==''){
+                    alert('菜单名称不能为空');
+                    return false;
+                }
+                if($('#modelname').val()==''){
+                    alert('模块名称不能为空');
+                    return false;
+                }
+                $('#editFrom').submit();
+            })
+        })
+    </script>

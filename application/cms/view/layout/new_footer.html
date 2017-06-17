@@ -1,0 +1,25 @@
+		
+		
+		<script src="{$Think.__STATIC__}/cms/js/jquery.nicescroll.js"></script>
+		<script src="{$Think.__STATIC__}/cms/js/scripts.js"></script>
+		<script src="{$Think.__STATIC__}/cms/iCheck/jquery.icheck.js"></script>
+		<script src="{$Think.__STATIC__}/cms/js/icheck-init.js"></script>
+
+		<script>
+			$(document).ready(function(){
+				var screenHeight = $(window).height();//获取屏幕可视区域的高度。
+				var divHeight = $(".cms_right_box2_bottom").height() + 1;//bottomDiv的高度再加上它一像素的边框。
+				var divHeight2 = $(".cms_right_top").height();
+				if(document.documentElement.clientHeight < document.documentElement.offsetHeight){
+					$(".cms_right_box2_bottom").css("margin-top",0);
+				}else{
+					$(".cms_right_box2_bottom").css("margin-top",screenHeight - divHeight-divHeight2-30);
+				}
+				
+			})
+		</script>
+	</body>
+
+</html>
+
+<!-- 一些js -->

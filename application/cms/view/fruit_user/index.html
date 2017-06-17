@@ -1,0 +1,137 @@
+{include file="layout/new_header" /}
+            <div class="cms_right_box1">
+                <form id="searchFrom" action='{:U("index")}' method='get'>
+
+                    
+                    <input type="hidden" name='pageSize' id='setPageSize'>
+                    <label>用户列表：</label>
+                    <div class="cms_right_box1_inner">
+                        <em><span>ID</span><input name="id" value='{$searchCnd['id']|default=""}'></em>
+                </div>
+                    
+                </form>
+                    
+                <b>
+                    <a href="javascript:;" class='submit' style="background: #70c4e8;">查找</a>
+                    <a href="javascript:;" id="resetval">清空</a>
+                </b>
+            </div>
+
+        <div class="cms_right_box2">
+
+            <div class="cms_right_box2_title">
+  
+                <div class="cms_right_box2_title_right"><a href="javascript:;" class='toexcel'><img src="{$Think.__STATIC__}/cms/images/down.png" />导出Excel</a></div>
+                
+            </div>
+
+
+            <div class="cms_right_box2_table">
+                <section class="panel">
+                    <div class="panel-body">
+                        <section id="no-more-tables">
+                            <table class="table table-bordered table-striped table-condensed cf table-hover">
+                                <thead class="cf">
+                                <tr>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">ID</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">微信用户openid</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">微信用户昵称</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">微信用户性别</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">微信用户头像地址</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">微信用户填写的省份</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">微信用户填写的城市</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">微信用户填写的国家</th>
+                                    <th style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;">创建时间</th>
+                                    <th class="width_limit" style="border-bottom: 1px solid #ddd;border-right: 1px solid #ddd;width:160px">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {foreach $arr as $k=>$list}
+                                <tr>
+                                    <td data-title="ID" title="{$list['id']}">{$list['id']}&nbsp;</td>
+                                    <td data-title="微信用户openid" title="{$list['openid']}">{$list['openid']}&nbsp;</td>
+                                    <td data-title="微信用户昵称" title="{$list['nickname']}">{$list['nickname']}&nbsp;</td>
+                                    {if $list['sex']==1}
+                                    <td data-title="微信用户性别，1:男，2:女，0:未知" title="{$list['sex']}">男&nbsp;</td>
+                                    {else}
+                                    <td data-title="微信用户性别，1:男，2:女，0:未知" title="{$list['sex']}">女&nbsp;</td>
+                                    {/if}
+                                    <td data-title="微信用户头像地址" title="{$list['headimgurl']}">{$list['headimgurl']}&nbsp;</td>
+                                    <td data-title="微信用户填写的省份" title="{$list['province']}">{$list['province']}&nbsp;</td>
+                                    <td data-title="微信用户填写的城市" title="{$list['city']}">{$list['city']}&nbsp;</td>
+                                    <td data-title="微信用户填写的国家" title="{$list['country']}">{$list['country']}&nbsp;</td>
+                                    <td data-title="创建时间" title="{$list['createtime']}">{$list['createtime']}&nbsp;</td>
+                                    <td class="width_limit" data-title="操作" style="height: 40px;">
+                                        <a  href="{:U('info',array('id'=>$list.id))}" class="cms_list_detail" title='详情'></a>
+                                       <!-- <a href="{:U('edit',array('id'=>$list.id))}" class="cms_list_edit" title='编辑'></a>-->
+                                    </td>
+                                </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
+                </section>
+
+                </div>
+            </div>
+        </div>        
+        {include file="layout/new_pager" /}
+        </div>
+        {include file="layout/new_footer" /}
+
+
+<script>
+    $(function(){
+        $('.submit').click(function(){
+            
+            pageSize = $('#pageSize[name="pageSize"]').val();
+            $('#setPageSize').val(pageSize);
+            return $('#searchFrom').submit();
+        })
+        $('#resetval').click(function(){
+            $('#searchFrom').find('input').val('');
+            $('#searchFrom').find('select').val('');
+            $('#pageSize[name="pageSize"]').val('25');
+            
+        })
+
+        inittoexcel();
+    })
+    function initDateTimePickers(field) {
+            $("#"+field).datetimepicker({
+                format: "yyyy-mm-dd hh:ii",
+                autoclose: true,
+                todayBtn: true,
+                startDate: "2016-01-01 10:00"
+            });
+            $("#starttimeReset").click(function(){
+                $("#"+field).val("");
+            });
+            $("#starttimeSet").click(function(){
+                $("#"+field).datetimepicker('show');
+            });
+            $("#"+field+"1").datetimepicker({
+                format: "yyyy-mm-dd hh:ii",
+                autoclose: true,
+                todayBtn: true,
+                startDate: "2016-01-01 10:00"
+            });
+            $("#starttimeReset").click(function(){
+                $("#"+field+"1").val("");
+            });
+            $("#starttimeSet").click(function(){
+                $("#"+field+"1").datetimepicker('show');
+            });
+    }
+    function inittoexcel(){
+        $('.toexcel').click(function(){
+            $("#searchFrom").prepend("<input id='gotoexcel' name='toexcel' value='1' type='hidden' >");
+            $('#searchFrom').attr('action','{:U('excel')}');
+            $('#searchFrom').submit();
+            $('#searchFrom').attr('action','{:U('index')}')
+            $('#gotoexcel').remove();
+        })
+    }
+
+</script>

@@ -1,0 +1,3 @@
+<?php
+//000000000000a:4:{s:6:"fields";a:9:{i:0;s:2:"id";i:1;s:6:"openid";i:2;s:8:"nickname";i:3;s:3:"sex";i:4;s:10:"headimgurl";i:5;s:8:"province";i:6;s:4:"city";i:7;s:7:"country";i:8;s:10:"createtime";}s:4:"bind";a:9:{s:2:"id";i:1;s:6:"openid";i:2;s:8:"nickname";i:2;s:3:"sex";i:1;s:10:"headimgurl";i:2;s:8:"province";i:2;s:4:"city";i:2;s:7:"country";i:2;s:10:"createtime";i:2;}s:4:"type";a:9:{s:2:"id";s:7:"int(11)";s:6:"openid";s:12:"varchar(255)";s:8:"nickname";s:12:"varchar(255)";s:3:"sex";s:10:"tinyint(2)";s:10:"headimgurl";s:12:"varchar(255)";s:8:"province";s:12:"varchar(255)";s:4:"city";s:12:"varchar(255)";s:7:"country";s:12:"varchar(255)";s:10:"createtime";s:8:"datetime";}s:2:"pk";s:2:"id";}
+?>

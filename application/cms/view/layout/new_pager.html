@@ -1,0 +1,32 @@
+
+            <div class="cms_right_box2_bottom">
+            <div class="cms_right_box2_bottom_left">
+            <select  id="pageSize" name='pageSize'>
+                <option value="25" {if condition="$pageSize eq '25'"}selected{/if}>25</option>
+                <option value="50" {if condition="$pageSize eq '50'"}selected{/if}>50</option>
+                <option value="100" {if condition="$pageSize eq '100'"}selected{/if}>100</option>
+            </select>
+                <span>当前页面显示</span>
+            </div>
+            {if condition="$pager['totalPage'] gt 0"}
+            <div class="cms_right_box2_bottom_right">
+                <ul>
+                    {if condition='$pager.currentPage elt 1'}
+                    <li><a href="javascript:void(0);" class="cms_page_prev"><img src="{$Think.__STATIC__}/cms/images/cms_page_prev.png" /></a></li>
+                    {else/}
+                    <li><a href="{$pager.url}&page={$pager.prevPage}" class="cms_page_prev"><img src="{$Think.__STATIC__}/cms/images/cms_page_prev.png" /></a></li>
+                    {/if}
+                    {volist name="pager['lists']" id="list"}
+                    <li ><a href="{$pager.url}&page={$list.index}" class="cms_page_num {if condition="$list['index'] eq $pager['currentPage']"}active{/if}">{$list.index}</a></li>
+                    {/volist}
+                    
+                    {if condition='$pager.currentPage egt $pager.totalPage'}
+                    <li><a href="javascript:void(0);" class="cms_page_next"><img src="{$Think.__STATIC__}/cms/images/cms_page_next.png" /></a></li>
+                    {else/}
+                    <li><a href="{$pager.url}&page={$pager.nextPage}" class="cms_page_next"><img src="{$Think.__STATIC__}/cms/images/cms_page_next.png" /></a></li>
+                    {/if}
+                    
+                </ul>
+            </div>
+            {/if}
+            </div>

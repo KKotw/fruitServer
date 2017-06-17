@@ -1,0 +1,44 @@
+{include file="layout/new_header" /}
+            <div class="cms_right_box1">
+                <label>分配模块</label>
+            </div>
+            <div class="cms_right_box2">
+                <div class="cms_right_box2_write">
+                    <form action='{:U('setmodel',array('id'=>$role.id))}' id="editFrom" method="post">
+                    <div class="cms_right_box2_write_inner">
+                        <div class="cms_right_box2_write_group1">
+                            <label>角色名称</label>
+                            <div class="cms_right_box2_write_group1_inner1"><input value='{$role.rolename}' readonly/></div>
+                        </div>
+
+                        <div class="cms_right_box2_write_group2">
+                            <b>模块名称</b>
+                            <div class="cms_right_box2_write_group1_inner4_par">
+                                <div class="col-sm-9 icheck" style="width: 100%;padding: 0;">            
+                            {foreach $arr as $v}
+                                    <div class="square-blue single-row" style="width:20.84%;margin-right: 0;min-width: 100px;">
+                                        <div class="checkbox " >
+                                            <input type="checkbox" value='{$v.id}' name="modelid[]" {if $v['checked']==1} checked {/if}>
+                                            <label>{$v.menuname}</label>
+                                        </div>
+                                    </div>
+                            {/foreach}
+                                </div>
+                            </div>  
+                        </div> 
+ 
+                        <div class="cms_right_box2_write_group1 write_group_btn">
+                            <a href="javascript:;" id="saveBtn">保存</a>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+{include file="layout/new_footer" /}
+<script>
+    $('#saveBtn').click(function(){
+        $('#editFrom').submit();
+    })
+</script>

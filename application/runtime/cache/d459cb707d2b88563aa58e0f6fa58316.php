@@ -1,0 +1,3 @@
+<?php
+//000000000000a:4:{s:6:"fields";a:9:{i:0;s:2:"id";i:1;s:7:"user_id";i:2;s:10:"machine_id";i:3;s:12:"order_number";i:4;s:11:"total_price";i:5;s:8:"products";i:6;s:6:"status";i:7;s:10:"left_count";i:8;s:10:"createtime";}s:4:"bind";a:9:{s:2:"id";i:1;s:7:"user_id";i:1;s:10:"machine_id";i:1;s:12:"order_number";i:2;s:11:"total_price";i:1;s:8:"products";i:2;s:6:"status";i:1;s:10:"left_count";i:1;s:10:"createtime";i:2;}s:4:"type";a:9:{s:2:"id";s:7:"int(11)";s:7:"user_id";s:7:"int(11)";s:10:"machine_id";s:7:"int(11)";s:12:"order_number";s:11:"varchar(50)";s:11:"total_price";s:13:"decimal(10,2)";s:8:"products";s:12:"varchar(500)";s:6:"status";s:10:"tinyint(2)";s:10:"left_count";s:6:"int(3)";s:10:"createtime";s:8:"datetime";}s:2:"pk";s:2:"id";}
+?>

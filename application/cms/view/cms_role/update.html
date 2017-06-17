@@ -1,0 +1,36 @@
+{include file="layout/new_header" /}
+            <div class="cms_right_box1">
+                <label>编辑角色</label>
+            </div>
+            <div class="cms_right_box2">
+                <div class="cms_right_box2_write">
+                    <form  id="editFrom" action="{:U('update',array('id'=>$info.id))}" method="post">
+                    <div class="cms_right_box2_write_inner">
+                        <div class="cms_right_box2_write_group1">
+                            <label>角色名称</label>
+                            <div class="cms_right_box2_write_group1_inner1"><input value='{$info.rolename}' /></div>
+                        </div>
+
+
+
+                        <div class="cms_right_box2_write_group1 write_group_btn">
+                            <a href="javascript:;" id="saveBtn">保存</a>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+{include file="layout/new_footer" /}
+    <script type="text/javascript">
+        $(function(){
+            $('#saveBtn').click(function(){
+                if($('#rolename').val()==''){
+                    alert('角色名称不能为空');
+                    return false;
+                }
+                $('#editFrom').submit();
+            })
+        })
+    </script>

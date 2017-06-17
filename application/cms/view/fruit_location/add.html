@@ -1,0 +1,234 @@
+{include file="layout/new_header" /}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+
+            <div class="cms_right_box1">
+                <label>添加货架商品位置</label>
+            </div>
+            <div class="cms_right_box2">
+                <div class="cms_right_box2_write">
+                    <div class="cms_right_box2_write_inner">
+                        <form class="cmxform form-horizontal adminex-form" id="addForm" action="{:U('add')}" method="post">
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>所属货架名称</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <select  id='machine_id' name = 'machine_id' {if isset($Think.get.machine_id)} readonly  {/if}>
+                                {:getfkarr('id,name,is_delete','fruit_machine','',$arr,0)}
+                                {if isset($arr)}
+                                {foreach $arr as $k=>$list}
+                                {if $list['is_delete']==0}
+                                    <option value="{$list['id']}" {if isset($Think.get.machine_id) } {$list['id']==$Think.get.machine_id? 'selected' : ''} {/if}>{$list['name']}</option>
+                                {/if}
+                                {/foreach}
+                                {/if}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>商品名称</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <select  id='product_id' name = 'product_id' {if isset($Think.get.product_id)} readonly  {/if}>
+                                {:getfkarr('id,name,is_delete','fruit_product','',$arr,0)}
+                                {if isset($arr)}
+                                {foreach $arr as $k=>$list}
+                                {if $list['is_delete']==0}
+                                    <option value="{$list['id']}" {if isset($Think.get.product_id) } {$list['id']==$Think.get.product_id? 'selected' : ''} {/if}>{$list['name']}</option>
+                                {/if}
+                                {/foreach}
+                                {/if}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>位置横坐标</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <input  id="location_x" name="location_x" type="number" value="" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>位置纵坐标</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <input  id="location_y" name="location_y" type="number" value="" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1">
+                            <label><span style="color:red">*</span>库存数量</label>
+                            <div class="cms_right_box2_write_group1_inner1">                                        
+                                <input  id="storage" name="storage" type="number" value="" />
+                            </div>
+                        </div>
+                        <div class="cms_right_box2_write_group1 write_group_btn">
+                            <a href="javascript:;" id="saveBtn">保存</a>
+                        </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var editor;
+        $(function(){
+
+            // 保存事件绑定
+            initSaveBtn();
+
+            // form验证初始化
+            initValidate();
+
+
+        });
+
+        /**
+         * 初始化时间控件
+         */
+        function initDateTimePickers(field) {
+            $("#"+field).datetimepicker({
+                format: "yyyy-mm-dd hh:ii",
+                autoclose: true,
+                todayBtn: true,
+                startDate: "2016-01-01 10:00"
+            });
+            $("#"+field+"Reset").click(function(){
+                $("#"+field).val("");
+            });
+            $("#"+field+"Set").click(function(){
+                $("#"+field).datetimepicker('show');
+            });
+        }
+
+        /**
+         * 文件上传框初始化
+         */
+        function initFileUpload(fieldClick,fieldUp,fieldValue,fieldView){
+            $(fieldClick).bind("click", function(){
+                return $(fieldUp).click();
+            });
+
+            $(fieldUp).fileupload({
+                autoUpload:true,
+                url:'{:U("upload/fileupload")}?photodir=fruit_location',
+                dataType:'json',
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                maxFileSize: 5000000,
+                added:function(e,data){
+                  if (data.files.error) {
+                      alert(data.files[0].error);
+                      return false;
+                  }
+                },
+                done:function(e,data){
+                  $(fieldView).attr('src', data.result.url);
+                  $(fieldValue).attr('value',data.result.url);
+                }
+            });        
+        }
+        /**
+         * 富文本框初始化
+         */
+        function initKindEditor(field) {
+            KindEditor.ready(function(K) {
+                editor = K.create('#'+field, {
+                    resizeType : 1,
+                    allowPreviewEmoticons : false,
+                    allowImageUpload : true,
+                    uploadJson : '{:U("upload/kindEditorUpload")}?photodir=fruit_location_text',
+                    height:350,
+                    width:'100%',
+                    items : [
+                        'source','undo','clearhtml','hr',
+                        'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                        'insertunorderedlist', '|', 'emoticons', 'image','link', 'unlink','baidumap','lineheight','table','anchor','preview','print','template','code','cut']
+                });
+            });
+        }
+
+        /**
+         * 表单验证初始化
+         */
+        function initValidate() {
+              // 手机号码验证
+              jQuery.validator.addMethod("isPhone", function(value, element) {
+                var length = value.length;
+                return this.optional(element) || (length == 11 && /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(value));
+              }, "请正确填写您的手机号码。");
+
+            $("#addForm").validate({
+                rules: {
+
+                },
+                messages: {
+                }
+            });
+        }
+        /**
+         * 保存按钮绑定
+         */
+        function initSaveBtn() {
+            $("#saveBtn").bind("click", function(){
+                if ($("#addForm").valid()) {
+                    // 图片隐藏框和富文本框只能alert提示错误
+                    // if ($("#imgurl").val() == null || $('#imgurl').val() == "") {
+                    //     alert("请上传图片");
+                    //     return false;
+                    // }
+                    if($('#machine_id').val()==''){
+                        alert('机器ID为空或者格式不正确');
+                        return false;
+                    }
+                    if($('#product_id').val()==''){
+                        alert('商品ID为空或者格式不正确');
+                        return false;
+                    }
+                    if($('#location_x').val()==''){
+                        alert('位置横坐标为空或者格式不正确');
+                        return false;
+                    }
+                    if($('#location_y').val()==''){
+                        alert('位置纵坐标为空或者格式不正确');
+                        return false;
+                    }
+                    if($('#storage').val()==''){
+                        alert('库存数量为空或者格式不正确');
+                        return false;
+                    }
+                    $("#addForm").submit();
+                }
+            });
+        }
+
+        function initAddLineBtn(field) {
+            $(".addLineBtn"+field).click(function(){
+                $("#addForm ."+field+"selectionLine").last().after($(addNewLine(field)));
+                var num = Math.floor(Math.random()*10000+1);
+                var up = field + 'Up' + num;
+                var click = field + 'Click' + num;
+                var view = field + 'View' + num;
+                var value = field + 'Value' + num;
+                $('#addForm .'+field+'selectionLine').last().children().first().attr('id',up);
+                $('#addForm .'+field+'selectionLine').last().children('.cms_right_box2_write_group1_inner5').find('span').find('input').attr('id',value);
+                $('#addForm .'+field+'selectionLine').last().children('.cms_right_box2_write_group1_inner5').find('span').find('a').attr('id',click);
+                $('#addForm .'+field+'selectionLine').last().children('.cms_right_box2_write_group1_inner5').find('b').find('img').attr('id',view);
+                initFileUpload('#'+click,'#'+up,'#'+value,'#'+view);
+            });
+        }
+        function addNewLine(field) {
+            var selectionLine = $("#"+field+"selectionTemplate").children().clone(true);
+            $(selectionLine).show();
+            $(selectionLine).removeAttr("id");
+            $(selectionLine).addClass(field+'selectionLine');
+            return selectionLine;
+        }
+        function initDeleteLineBtn(field) {
+            $(".deleteLineBtn"+field).click(function(){
+                var selectionLine = $("#addForm").find("div."+field+"selectionLine");
+                if (selectionLine.length > 1) {
+                    $(this).parents("div."+field+"selectionLine").remove();
+                } else { 
+                    $(this).parents("div."+field+"selectionLine").children('.cms_right_box2_write_group1_inner5').find('b').find('img').attr("src",'');
+                    $(this).parents("div."+field+"selectionLine").find("input").val("");
+                }
+            });
+        }
+
+    </script>
+    {include file="layout/new_footer" /}
